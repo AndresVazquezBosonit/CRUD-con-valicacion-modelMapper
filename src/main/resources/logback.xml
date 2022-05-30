@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Propiedades generales-->
+    <property name="LOGS" value="./src/main/resources/logs"/>
+    <!-- Configuracion de los logs por consola -->
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>
+                %cyan(%date{ISO08601}) %highlight(%-5level) [%blue(%t)] %magenta(%C{1.}): %highlight(%msg) %n
+
+            </pattern>
+        </layout>
+    </appender>
+    <!-- Establecer el nivel para los Logs configurados -->
+    <root name="BS5Logging" level="warn" additivity="true">
+        <appender-ref ref="Console"/>
+    </root>
+
+</configuration>
