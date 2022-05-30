@@ -1,6 +1,5 @@
 package CRUDvalidacionDTOSmodelMapper.PersonController;
 
-import CRUDvalidacionDTOSmodelMapper.entity.Person;
 import CRUDvalidacionDTOSmodelMapper.entity.PersonInputDTO;
 import CRUDvalidacionDTOSmodelMapper.entity.PersonOutputDTO;
 import CRUDvalidacionDTOSmodelMapper.service.PersonService;

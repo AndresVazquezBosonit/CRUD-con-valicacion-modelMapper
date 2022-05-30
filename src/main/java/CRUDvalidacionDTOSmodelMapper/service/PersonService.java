@@ -26,13 +26,37 @@ public class PersonService {
 
     ///// ----------------------- Add new Person -----------------------/////
     public PersonOutputDTO addPerson(PersonInputDTO personInputDTO) throws Exception {
+
         if (personInputDTO.getUsername().length() < 6 || personInputDTO.getUsername().length() > 10) {
+
             throw new Exception("The username must be between 6 and 10 characters long");
-        } else if (personInputDTO.getUsername() == null) {
-            throw new Exception("The username cannot be null");
+
+        } else if (personInputDTO.getUsername() == null || personInputDTO.getUsername().isEmpty()) {
+
+            throw new Exception("The username cannot be null or empty");
+
+        } else if (personInputDTO.getPassword() == null || personInputDTO.getPassword().isEmpty()) {
+
+            throw new Exception("The password cannot be null or empty");
+
+        } else if (personInputDTO.getName() == null || personInputDTO.getName().isEmpty()) {
+
+            throw new Exception("The name cannot be null or empty");
+
+        } else if (personInputDTO.getCompany_email() == null | personInputDTO.getCompany_email().isEmpty()) {
+
+            throw new Exception("The company email cannot be null or empty");
+
+        } else if (personInputDTO.getPersonal_email() == null || personInputDTO.getPersonal_email().isEmpty()) {
+
+            throw new Exception("The personal email cannot be null or empty");
+
+        } else if (personInputDTO.getCity() == null || personInputDTO.getCity().isEmpty()) {
+
+            throw new Exception("The city cannot be null or empty");
+
         } else {
             LocalDate creationDate = LocalDate.now();
-            // no sé si es mejor con @Autowired para no instanciar en método //
             PersonOutputDTO personOutputDTO = new PersonOutputDTO();
             personInputDTO.setCreated_date(
                     new SimpleDateFormat("yyyy-mm-dd").parse(creationDate.toString()));
@@ -65,7 +89,6 @@ public class PersonService {
             PersonOutputDTO personOutputDTO = new PersonOutputDTO();
             personOutputDTO = modelMapper.map(personInBD, PersonOutputDTO.class);
             return personOutputDTO;
-
         } catch (Exception e) {
             throw new Exception("the person no does not exist");
         }

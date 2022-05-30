@@ -41,7 +41,7 @@ public class Person {
     private Boolean active = true;
 
     @Column(name = "created_date")
-    @Temporal(TemporalType.TIMESTAMP)
+   // @Temporal(TemporalType.TIMESTAMP)
     private Date created_date;
 
     private String image_url;
