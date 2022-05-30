@@ -48,7 +48,7 @@ public class PersonService {
     ///// ----------------------------- Get All person ---------------------/////
     public List<PersonOutputDTO> listPerson() {
         List<PersonOutputDTO> personList = new ArrayList<>();
-        personRepository.findAll().stream()
+        personRepository.findAll()
                 .forEach(
                         person -> {
                             PersonOutputDTO personOutputDTO = new PersonOutputDTO();
