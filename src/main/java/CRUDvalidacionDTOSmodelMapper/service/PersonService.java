@@ -1,12 +1,14 @@
 package CRUDvalidacionDTOSmodelMapper.service;
 
-import CRUDvalidacionDTOSmodelMapper.entity.Person;
-import CRUDvalidacionDTOSmodelMapper.entity.PersonInputDTO;
-import CRUDvalidacionDTOSmodelMapper.entity.PersonOutputDTO;
-import CRUDvalidacionDTOSmodelMapper.repository.PersonRepository;
+import CRUDvalidacionDTOSmodelMapper.domain.Person;
+import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.input.PersonInputDTO;
+import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.output.PersonOutputDTO;
+import CRUDvalidacionDTOSmodelMapper.aplication.PersonRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -25,7 +27,7 @@ public class PersonService {
 
 
     ///// ----------------------- Add new Person -----------------------/////
-    public PersonOutputDTO addPerson(PersonInputDTO personInputDTO) throws Exception {
+    public ResponseEntity<PersonOutputDTO> addPerson(PersonInputDTO personInputDTO) throws Exception {
 
         if (personInputDTO.getUsername().length() < 6 || personInputDTO.getUsername().length() > 10) {
 
@@ -65,12 +67,12 @@ public class PersonService {
             personOutputDTO = modelMapper.map(personInputDTO, PersonOutputDTO.class);
             personOutputDTO.setId_person(personEntity.getId_person());
 
-            return personOutputDTO;
+            return new ResponseEntity<>(personOutputDTO, HttpStatus.CREATED);
         }
     }
 
     ///// ----------------------------- Get All person ---------------------/////
-    public List<PersonOutputDTO> listPerson() {
+    public ResponseEntity<List<PersonOutputDTO>> listPerson() {
         List<PersonOutputDTO> personList = new ArrayList<>();
         personRepository.findAll()
                 .forEach(
@@ -79,18 +81,21 @@ public class PersonService {
                             personOutputDTO = modelMapper.map(person, PersonOutputDTO.class);
                             personList.add(personOutputDTO);
                         });
-        return personList;
+        return new ResponseEntity<>(personList, HttpStatus.OK);
     }
 
     ///// ---------------------------- Find Person By Id ------------------------/////
-    public PersonOutputDTO personById(int id) throws Exception {
-        try {
-            Optional<Person> personInBD = personRepository.findById(id);
+    public ResponseEntity<PersonOutputDTO> personById(int id) throws Exception {
+        Optional<Person> personInBD = personRepository.findById(id);
+        if (personInBD.isPresent()) {
+
             PersonOutputDTO personOutputDTO = new PersonOutputDTO();
             personOutputDTO = modelMapper.map(personInBD, PersonOutputDTO.class);
-            return personOutputDTO;
-        } catch (Exception e) {
-            throw new Exception("the person no does not exist");
+
+            return new ResponseEntity<>(personOutputDTO, HttpStatus.ACCEPTED);
+
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -112,27 +117,26 @@ public class PersonService {
     }
 
     ///// ------------------------------- Delete Person --------------------------- /////
-    public String deletePersona(int id) throws Exception {
-        try {
-            Optional<Person> personToDelete = personRepository.findById(id);
+    public ResponseEntity<String> deletePersona(int id) throws Exception {
+        Optional<Person> personToDelete = personRepository.findById(id);
+        if (personToDelete.isPresent()) {
             personRepository.deleteById(id);
-            return "Has been deleted: "
+            return new ResponseEntity<>("Has been deleted: "
                     + personToDelete.get().getName()
                     + " from: "
                     + personToDelete.get().getCity()
                     + " with id: "
-                    + personToDelete.get().getId_person();
-
-        } catch (Exception e) {
-            throw new Exception("the person does not exist");
+                    + personToDelete.get().getId_person(), HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>("the person with id: " + id + " does not exist.", HttpStatus.NOT_ACCEPTABLE);
         }
+
     }
 
     ///// -------------------------------- Update Person ----------------------------- /////
-    public PersonOutputDTO updatePerson(PersonInputDTO personInputDTO, int id) throws Exception {
-        Optional<Person> personEntity;
-        try {
-            personEntity = personRepository.findById(id);
+    public ResponseEntity<PersonOutputDTO> updatePerson(PersonInputDTO personInputDTO, int id) throws Exception {
+        Optional<Person> personEntity = personRepository.findById(id);
+        if (personEntity.isPresent()) {
             personInputDTO.setId_person(id);
             personInputDTO.setUsername(
                     Optional.ofNullable(personInputDTO.getUsername())
@@ -159,10 +163,10 @@ public class PersonService {
             personInputDTO.setCreated_date(personEntity.get().getCreated_date());
             personRepository.saveAndFlush(modelMapper.map(personInputDTO, Person.class));
             PersonOutputDTO personOutputDTO = modelMapper.map(personInputDTO, PersonOutputDTO.class);
-            return personOutputDTO;
+            return new ResponseEntity<>(personOutputDTO, HttpStatus.OK);
 
-        } catch (Exception e) {
-            throw new Exception("Something went wrong or the person does not exist");
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
 }

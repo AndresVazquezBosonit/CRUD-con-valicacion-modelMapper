@@ -1,4 +1,4 @@
-package CRUDvalidacionDTOSmodelMapper.config;
+package CRUDvalidacionDTOSmodelMapper.aplication;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
