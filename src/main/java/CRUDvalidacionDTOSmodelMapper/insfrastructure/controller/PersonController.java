@@ -34,7 +34,7 @@ public class PersonController {
     }
 
     @GetMapping("/name")
-    public List<PersonOutputDTO> personListByName(@RequestParam String name) throws Exception {
+    public ResponseEntity<List<PersonOutputDTO>> personListByName(@RequestParam String name) throws Exception {
         return personService.personByName(name);
     }
 

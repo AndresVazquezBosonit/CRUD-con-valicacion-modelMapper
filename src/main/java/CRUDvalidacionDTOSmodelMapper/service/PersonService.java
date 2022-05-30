@@ -92,7 +92,7 @@ public class PersonService {
             PersonOutputDTO personOutputDTO = new PersonOutputDTO();
             personOutputDTO = modelMapper.map(personInBD, PersonOutputDTO.class);
 
-            return new ResponseEntity<>(personOutputDTO, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(personOutputDTO, HttpStatus.OK);
 
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -100,7 +100,7 @@ public class PersonService {
     }
 
     ///// ------------------------------- Find By Name ----------------------------- /////
-    public List<PersonOutputDTO> personByName(String name) throws Exception {
+    public ResponseEntity<List<PersonOutputDTO>> personByName(String name) throws Exception {
         try {
             List<PersonOutputDTO> lisPersonOutputDTOS = new ArrayList<>();
             List<Person> personsInBD = personRepository.findByName(name);
@@ -109,7 +109,7 @@ public class PersonService {
                         PersonOutputDTO personOutputDTO = modelMapper.map(person, PersonOutputDTO.class);
                         lisPersonOutputDTOS.add(personOutputDTO);
                     });
-            return lisPersonOutputDTOS;
+            return new ResponseEntity<>(lisPersonOutputDTOS, HttpStatus.OK);
 
         } catch (Exception e) {
             throw new Exception("the person name no does not exist");
@@ -126,7 +126,7 @@ public class PersonService {
                     + " from: "
                     + personToDelete.get().getCity()
                     + " with id: "
-                    + personToDelete.get().getId_person(), HttpStatus.CREATED);
+                    + personToDelete.get().getId_person(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>("the person with id: " + id + " does not exist.", HttpStatus.NOT_ACCEPTABLE);
         }
@@ -163,7 +163,7 @@ public class PersonService {
             personInputDTO.setCreated_date(personEntity.get().getCreated_date());
             personRepository.saveAndFlush(modelMapper.map(personInputDTO, Person.class));
             PersonOutputDTO personOutputDTO = modelMapper.map(personInputDTO, PersonOutputDTO.class);
-            return new ResponseEntity<>(personOutputDTO, HttpStatus.OK);
+            return new ResponseEntity<>(personOutputDTO, HttpStatus.ACCEPTED);
 
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
