@@ -1,4 +1,4 @@
-package CRUDvalidacionDTOSmodelMapper.aplication;
+package CRUDvalidacionDTOSmodelMapper.insfrastructure.repository;
 
 import CRUDvalidacionDTOSmodelMapper.domain.Person;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,9 +1,9 @@
-package CRUDvalidacionDTOSmodelMapper.aplication.service;
+package CRUDvalidacionDTOSmodelMapper.aplication;
 
 import CRUDvalidacionDTOSmodelMapper.domain.Person;
 import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.input.PersonInputDTO;
 import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.output.PersonOutputDTO;
-import CRUDvalidacionDTOSmodelMapper.aplication.PersonRepository;
+import CRUDvalidacionDTOSmodelMapper.insfrastructure.repository.PersonRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
