@@ -1,4 +1,4 @@
-package CRUDvalidacionDTOSmodelMapper.service;
+package CRUDvalidacionDTOSmodelMapper.aplication.service;
 
 import CRUDvalidacionDTOSmodelMapper.domain.Person;
 import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.input.PersonInputDTO;
