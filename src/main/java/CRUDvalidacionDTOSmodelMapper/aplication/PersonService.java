@@ -59,11 +59,14 @@ public class PersonService {
 
         } else {
             LocalDate creationDate = LocalDate.now();
+
             PersonOutputDTO personOutputDTO = new PersonOutputDTO();
             personInputDTO.setCreated_date(
                     new SimpleDateFormat("yyyy-mm-dd").parse(creationDate.toString()));
+
             Person personEntity =
                     personRepository.saveAndFlush(modelMapper.map(personInputDTO, Person.class));
+
             personOutputDTO = modelMapper.map(personInputDTO, PersonOutputDTO.class);
             personOutputDTO.setId_person(personEntity.getId_person());
 
@@ -73,7 +76,9 @@ public class PersonService {
 
     ///// ----------------------------- Get All person ---------------------/////
     public ResponseEntity<List<PersonOutputDTO>> listPerson() {
+
         List<PersonOutputDTO> personList = new ArrayList<>();
+
         personRepository.findAll()
                 .forEach(
                         person -> {
@@ -81,12 +86,14 @@ public class PersonService {
                             personOutputDTO = modelMapper.map(person, PersonOutputDTO.class);
                             personList.add(personOutputDTO);
                         });
+
         return new ResponseEntity<>(personList, HttpStatus.OK);
     }
 
     ///// ---------------------------- Find Person By Id ------------------------/////
     public ResponseEntity<PersonOutputDTO> personById(int id) throws Exception {
         Optional<Person> personInBD = personRepository.findById(id);
+
         if (personInBD.isPresent()) {
 
             PersonOutputDTO personOutputDTO = new PersonOutputDTO();
@@ -100,27 +107,29 @@ public class PersonService {
     }
 
     ///// ------------------------------- Find By Name ----------------------------- /////
-    public ResponseEntity<List<PersonOutputDTO>> personByName(String name) throws Exception {
-        try {
-            List<PersonOutputDTO> lisPersonOutputDTOS = new ArrayList<>();
-            List<Person> personsInBD = personRepository.findByName(name);
-            personsInBD
-                    .forEach(person -> {
-                        PersonOutputDTO personOutputDTO = modelMapper.map(person, PersonOutputDTO.class);
-                        lisPersonOutputDTOS.add(personOutputDTO);
-                    });
-            return new ResponseEntity<>(lisPersonOutputDTOS, HttpStatus.OK);
+    public ResponseEntity<List<PersonOutputDTO>> personByName(String name) {
 
-        } catch (Exception e) {
-            throw new Exception("the person name no does not exist");
-        }
+        List<PersonOutputDTO> lisPersonOutputDTOS = new ArrayList<>();
+
+        List<Person> personsInBD = personRepository.findByName(name);
+
+        personsInBD
+                .forEach(person -> {
+                    PersonOutputDTO personOutputDTO = modelMapper.map(person, PersonOutputDTO.class);
+                    lisPersonOutputDTOS.add(personOutputDTO);
+                });
+        return new ResponseEntity<>(lisPersonOutputDTOS, HttpStatus.OK);
+
     }
 
     ///// ------------------------------- Delete Person --------------------------- /////
     public ResponseEntity<String> deletePersona(int id) throws Exception {
         Optional<Person> personToDelete = personRepository.findById(id);
+
         if (personToDelete.isPresent()) {
+
             personRepository.deleteById(id);
+
             return new ResponseEntity<>("Has been deleted: "
                     + personToDelete.get().getName()
                     + " from: "
@@ -128,6 +137,7 @@ public class PersonService {
                     + " with id: "
                     + personToDelete.get().getId_person(), HttpStatus.OK);
         } else {
+
             return new ResponseEntity<>("the person with id: " + id + " does not exist.", HttpStatus.NOT_ACCEPTABLE);
         }
 
